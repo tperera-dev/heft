@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+const APP_VERSION = "1.1";
 
 // ── Default Exercise Library ──────────────────────────────────
 const DEFAULT_EXERCISES = [
@@ -515,7 +516,21 @@ function save(key, val) {
 export default function App() {
   const [tab, setTab]               = useState("log");
   const [selectedDate, setSelectedDate] = useState(today());
-  const [exercises, setExercises]   = useState(() => load("wt:exercises", DEFAULT_EXERCISES));
+  const [exercises, setExercises] = useState(() => {
+    const savedVersion = load("wt:version", null);
+    const saved = load("wt:exercises", null);
+    if (!saved || savedVersion !== APP_VERSION) {
+      // Merge: keep custom exercises, add any new defaults
+      const custom = (saved || []).filter(e => e.custom);
+      const existingIds = new Set((saved || []).map(e => e.id));
+      const newDefaults = DEFAULT_EXERCISES.filter(e => !existingIds.has(e.id));
+      const merged = [...DEFAULT_EXERCISES, ...custom.filter(e => !DEFAULT_EXERCISES.find(d => d.id === e.id)), ...newDefaults.filter(e => !DEFAULT_EXERCISES.find(d => d.id === e.id))];
+      save("wt:version", APP_VERSION);
+      save("wt:exercises", DEFAULT_EXERCISES.concat(custom));
+      return DEFAULT_EXERCISES.concat(custom);
+    }
+    return saved;
+  });
   const [routines,  setRoutines]    = useState(() => load("wt:routines",  []));
   const [workouts,  setWorkouts]    = useState(() => load("wt:workouts",  {}));
 
