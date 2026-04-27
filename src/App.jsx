@@ -3,21 +3,67 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 
 // ── Default Exercise Library ──────────────────────────────────
 const DEFAULT_EXERCISES = [
-  { id: "e1",  name: "Bench Press",        muscle: "Chest" },
-  { id: "e2",  name: "Squat",              muscle: "Legs" },
-  { id: "e3",  name: "Deadlift",           muscle: "Back" },
-  { id: "e4",  name: "Overhead Press",     muscle: "Shoulders" },
-  { id: "e5",  name: "Barbell Row",        muscle: "Back" },
-  { id: "e6",  name: "Pull-Up",            muscle: "Back" },
-  { id: "e7",  name: "Dumbbell Curl",      muscle: "Arms" },
-  { id: "e8",  name: "Tricep Pushdown",    muscle: "Arms" },
-  { id: "e9",  name: "Leg Press",          muscle: "Legs" },
-  { id: "e10", name: "Romanian Deadlift",  muscle: "Legs" },
-  { id: "e11", name: "Lat Pulldown",       muscle: "Back" },
-  { id: "e12", name: "Incline Bench Press",muscle: "Chest" },
-  { id: "e13", name: "Dumbbell Fly",       muscle: "Chest" },
-  { id: "e14", name: "Leg Curl",           muscle: "Legs" },
-  { id: "e15", name: "Calf Raise",         muscle: "Legs" },
+  // Chest
+  { id: "e1",  name: "Bench Press",              muscle: "Chest" },
+  { id: "e12", name: "Incline Bench Press",       muscle: "Chest" },
+  { id: "e13", name: "Dumbbell Fly",              muscle: "Chest" },
+  { id: "e16", name: "Machine Chest Press",       muscle: "Chest" },
+  { id: "e17", name: "Cable Fly",                 muscle: "Chest" },
+  { id: "e18", name: "Pec Deck",                  muscle: "Chest" },
+  { id: "e19", name: "Push Up",                   muscle: "Chest" },
+
+  // Back
+  { id: "e3",  name: "Deadlift",                  muscle: "Back" },
+  { id: "e5",  name: "Barbell Row",               muscle: "Back" },
+  { id: "e6",  name: "Pull-Up",                   muscle: "Back" },
+  { id: "e11", name: "Lat Pulldown",              muscle: "Back" },
+  { id: "e10", name: "Romanian Deadlift",         muscle: "Back" },
+  { id: "e20", name: "Seated Cable Row",          muscle: "Back" },
+  { id: "e21", name: "Single Arm Dumbbell Row",   muscle: "Back" },
+  { id: "e22", name: "T-Bar Row",                 muscle: "Back" },
+  { id: "e23", name: "Hyperextension",            muscle: "Back" },
+
+  // Legs
+  { id: "e2",  name: "Squat",                     muscle: "Legs" },
+  { id: "e9",  name: "Leg Press",                 muscle: "Legs" },
+  { id: "e14", name: "Leg Curl",                  muscle: "Legs" },
+  { id: "e15", name: "Calf Raise",                muscle: "Legs" },
+  { id: "e24", name: "Hack Squat",                muscle: "Legs" },
+  { id: "e25", name: "Leg Extension",             muscle: "Legs" },
+  { id: "e26", name: "Walking Lunge",             muscle: "Legs" },
+  { id: "e27", name: "Bulgarian Split Squat",     muscle: "Legs" },
+  { id: "e28", name: "Hip Thrust",                muscle: "Legs" },
+  { id: "e29", name: "Seated Calf Raise",         muscle: "Legs" },
+
+  // Shoulders
+  { id: "e4",  name: "Overhead Press",            muscle: "Shoulders" },
+  { id: "e30", name: "Lateral Raise",             muscle: "Shoulders" },
+  { id: "e31", name: "Front Raise",               muscle: "Shoulders" },
+  { id: "e32", name: "Rear Delt Fly",             muscle: "Shoulders" },
+  { id: "e33", name: "Arnold Press",              muscle: "Shoulders" },
+  { id: "e34", name: "Machine Shoulder Press",    muscle: "Shoulders" },
+  { id: "e35", name: "Cable Lateral Raise",       muscle: "Shoulders" },
+  { id: "e36", name: "Face Pull",                 muscle: "Shoulders" },
+
+  // Arms
+  { id: "e7",  name: "Dumbbell Curl",             muscle: "Arms" },
+  { id: "e8",  name: "Tricep Pushdown",           muscle: "Arms" },
+  { id: "e37", name: "Barbell Curl",              muscle: "Arms" },
+  { id: "e38", name: "Hammer Curl",               muscle: "Arms" },
+  { id: "e39", name: "Preacher Curl",             muscle: "Arms" },
+  { id: "e40", name: "Cable Curl",                muscle: "Arms" },
+  { id: "e41", name: "Skull Crusher",             muscle: "Arms" },
+  { id: "e42", name: "Overhead Tricep Extension", muscle: "Arms" },
+  { id: "e43", name: "Close Grip Bench Press",    muscle: "Arms" },
+  { id: "e44", name: "Dip",                       muscle: "Arms" },
+
+  // Core
+  { id: "e45", name: "Plank",                     muscle: "Core" },
+  { id: "e46", name: "Cable Crunch",              muscle: "Core" },
+  { id: "e47", name: "Hanging Leg Raise",         muscle: "Core" },
+  { id: "e48", name: "Ab Wheel Rollout",          muscle: "Core" },
+  { id: "e49", name: "Russian Twist",             muscle: "Core" },
+  { id: "e50", name: "Decline Sit Up",            muscle: "Core" },
 ];
 
 const MUSCLE_GROUPS = ["Chest","Back","Legs","Shoulders","Arms","Core","Cardio","Other"];
