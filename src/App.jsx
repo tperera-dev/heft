@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-const APP_VERSION = "1.1";
+const APP_VERSION = "1.2";
 
 // ── Default Exercise Library ──────────────────────────────────
 const DEFAULT_EXERCISES = [
@@ -12,6 +12,7 @@ const DEFAULT_EXERCISES = [
   { id: "e17", name: "Cable Fly",                 muscle: "Chest" },
   { id: "e18", name: "Pec Deck",                  muscle: "Chest" },
   { id: "e19", name: "Push Up",                   muscle: "Chest" },
+  { id: "e51", name: "Incline Dumbbell Bench Press", muscle: "Chest" },
 
   // Back
   { id: "e3",  name: "Deadlift",                  muscle: "Back" },
@@ -23,6 +24,7 @@ const DEFAULT_EXERCISES = [
   { id: "e21", name: "Single Arm Dumbbell Row",   muscle: "Back" },
   { id: "e22", name: "T-Bar Row",                 muscle: "Back" },
   { id: "e23", name: "Hyperextension",            muscle: "Back" },
+  { id: "e55", name: "Single Arm Iso Lateral Row Machine", muscle: "Back" },
 
   // Legs
   { id: "e2",  name: "Squat",                     muscle: "Legs" },
@@ -35,6 +37,9 @@ const DEFAULT_EXERCISES = [
   { id: "e27", name: "Bulgarian Split Squat",     muscle: "Legs" },
   { id: "e28", name: "Hip Thrust",                muscle: "Legs" },
   { id: "e29", name: "Seated Calf Raise",         muscle: "Legs" },
+  { id: "e60", name: "Abductor Machine",              muscle: "Legs" },
+  { id: "e61", name: "Hip Thrust Machine",            muscle: "Legs" },
+  { id: "e62", name: "Single Dumbbell Split Squat",   muscle: "Legs" },
 
   // Shoulders
   { id: "e4",  name: "Overhead Press",            muscle: "Shoulders" },
@@ -45,6 +50,8 @@ const DEFAULT_EXERCISES = [
   { id: "e34", name: "Machine Shoulder Press",    muscle: "Shoulders" },
   { id: "e35", name: "Cable Lateral Raise",       muscle: "Shoulders" },
   { id: "e36", name: "Face Pull",                 muscle: "Shoulders" },
+  { id: "e52", name: "Dumbbell Shoulder Press",   muscle: "Shoulders" },
+  { id: "e56", name: "Machine Reverse Fly",                muscle: "Shoulders" },
 
   // Arms
   { id: "e7",  name: "Dumbbell Curl",             muscle: "Arms" },
@@ -57,6 +64,9 @@ const DEFAULT_EXERCISES = [
   { id: "e42", name: "Overhead Tricep Extension", muscle: "Arms" },
   { id: "e43", name: "Close Grip Bench Press",    muscle: "Arms" },
   { id: "e44", name: "Dip",                       muscle: "Arms" },
+  { id: "e53", name: "Tricep Rope Pushdown",      muscle: "Arms" },
+  { id: "e57", name: "Cable Bicep Curl",                   muscle: "Arms" },
+  { id: "e58", name: "Seated Incline Dumbbell Hammer Curl",muscle: "Arms" },
 
   // Core
   { id: "e45", name: "Plank",                     muscle: "Core" },
@@ -65,6 +75,53 @@ const DEFAULT_EXERCISES = [
   { id: "e48", name: "Ab Wheel Rollout",          muscle: "Core" },
   { id: "e49", name: "Russian Twist",             muscle: "Core" },
   { id: "e50", name: "Decline Sit Up",            muscle: "Core" },
+  { id: "e54", name: "Oblique Side Bend",         muscle: "Core" },
+  { id: "e59", name: "Decline Bench Sit Up",               muscle: "Core" },
+
+];
+
+const DEFAULT_ROUTINES = [
+  {
+    id: "r1",
+    name: "Push Day",
+    exercises: [
+      { exerciseId: "e16", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e51", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e18", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e30", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e52", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e42", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e53", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e54", sets: 2, minReps: 8, maxReps: 12 },
+    ]
+  },
+  {
+    id: "r2",
+    name: "Pull Day",
+    exercises: [
+  { exerciseId: "e11", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e20", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e55", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e56", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e57", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e58", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e59", sets: 2, minReps: 8, maxReps: 12 },
+    ]
+  },
+  {
+    id: "r3",
+    name: "Legs Day",
+    exercises: [
+      { exerciseId: "e60", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e61", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e9",  sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e62", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e25", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e14", sets: 2, minReps: 8, maxReps: 12 },
+      { exerciseId: "e15", sets: 2, minReps: 8, maxReps: 12 },
+
+    ]
+  },
 ];
 
 const MUSCLE_GROUPS = ["Chest","Back","Legs","Shoulders","Arms","Core","Cardio","Other"];
@@ -531,8 +588,22 @@ export default function App() {
     }
     return saved;
   });
-  const [routines,  setRoutines]    = useState(() => load("wt:routines",  []));
-  const [workouts,  setWorkouts]    = useState(() => load("wt:workouts",  {}));
+  const [routines, setRoutines] = useState(() => {
+    const saved = load("wt:routines", null);
+    if (!saved) {
+      save("wt:routines", DEFAULT_ROUTINES);
+      return DEFAULT_ROUTINES;
+    }
+    // Add default routines if they don't exist yet
+    const existingIds = new Set(saved.map(r => r.id));
+    const missing = DEFAULT_ROUTINES.filter(r => !existingIds.has(r.id));
+    if (missing.length > 0) {
+      const merged = [...missing, ...saved];
+      save("wt:routines", merged);
+      return merged;
+    }
+    return saved;
+  });  const [workouts,  setWorkouts]    = useState(() => load("wt:workouts",  {}));
 
   const saveExercises = (v) => { setExercises(v); save("wt:exercises", v); };
   const saveRoutines  = (v) => { setRoutines(v);  save("wt:routines",  v); };
@@ -575,9 +646,18 @@ function LogTab({ date, setDate, workouts, saveWorkouts, exercises, routines }) 
 
   const addRoutine = (routine) => {
     const existing = new Set(workout.blocks.map(b => b.exerciseId));
-    const newBlocks = routine.exerciseIds
-      .filter(id => !existing.has(id))
-      .map(id => ({ id: uid(), exerciseId: id, sets: [{ weight: "", reps: "" }] }));
+    // Support both old (exerciseIds) and new (exercises) schema
+    const exerciseList = routine.exercises
+      ? routine.exercises
+      : routine.exerciseIds.map(id => ({ exerciseId: id, sets: 3, minReps: 8, maxReps: 12 }));
+    const newBlocks = exerciseList
+      .filter(e => !existing.has(e.exerciseId))
+      .map(e => ({
+        id: uid(),
+        exerciseId: e.exerciseId,
+        sets: Array.from({ length: e.sets }, () => ({ weight: "", reps: "" })),
+        repRange: e.minReps && e.maxReps ? `${e.minReps}–${e.maxReps}` : null,
+      }));
     updateWorkout([...workout.blocks, ...newBlocks]);
     setShowRoutinePicker(false);
   };
@@ -636,7 +716,7 @@ function LogTab({ date, setDate, workouts, saveWorkouts, exercises, routines }) 
                 <button className="btn btn-danger btn-sm" onClick={() => removeBlock(block.id)}>✕</button>
               </div>
             </div>
-            <SetsEditor sets={block.sets} onChange={(s) => updateBlock(block.id, s)} exId={block.exerciseId} workouts={workouts} date={date} />
+            <SetsEditor sets={block.sets} onChange={(s) => updateBlock(block.id, s)} exId={block.exerciseId} workouts={workouts} date={date} repRange={block.repRange} />
           </div>
         );
       })}
@@ -649,7 +729,7 @@ function LogTab({ date, setDate, workouts, saveWorkouts, exercises, routines }) 
               <div key={r.id} className="routine-item" onClick={() => addRoutine(r)}>
                 <div style={{flex:1}}>
                   <div className="routine-name" style={{marginBottom:8}}>{r.name}</div>
-                  {r.exerciseIds.map(id => {
+                  {(r.exercises ? r.exercises.map(e => e.exerciseId) : r.exerciseIds).map(id => {
                     const ex = exercises.find(e => e.id === id);
                     if (!ex) return null;
                     const lastSets = (() => {
@@ -689,7 +769,7 @@ function LogTab({ date, setDate, workouts, saveWorkouts, exercises, routines }) 
   );
 }
 
-function SetsEditor({ sets, onChange, exId, workouts, date }) {
+function SetsEditor({ sets, onChange, exId, workouts, date, repRange}) {
   const lastSession = (() => {
     const dates = Object.keys(workouts).filter(d => d < date).sort().reverse();
     for (const d of dates) {
@@ -740,6 +820,11 @@ function SetsEditor({ sets, onChange, exId, workouts, date }) {
           <button className="btn btn-ghost btn-sm btn-icon" onClick={() => removeSet(i)} style={{color:"#555"}}>−</button>
         </div>
       ))}
+      {repRange && (
+        <div style={{fontSize:11,color:"#c8ff00",marginBottom:8,letterSpacing:"0.5px",opacity:0.7}}>
+          Target: {repRange} reps
+        </div>
+      )}
       <button className="btn btn-ghost btn-sm" style={{width:"100%",marginTop:4}} onClick={addSet}>+ Add Set</button>
     </div>
   );
@@ -753,14 +838,18 @@ function RoutinesTab({ routines, saveRoutines, exercises }) {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const openCreate = () => { setName(""); setSelectedIds([]); setEditing(null); setCreating(true); };
-  const openEdit = (r) => { setName(r.name); setSelectedIds(r.exerciseIds); setEditing(r.id); setCreating(true); };
-
+  const openEdit = (r) => {
+    setName(r.name);
+    setSelectedIds(r.exercises ? r.exercises.map(e => e.exerciseId) : r.exerciseIds);
+    setEditing(r.id);
+    setCreating(true);
+  };
   const saveRoutine = () => {
     if (!name.trim() || selectedIds.length === 0) return;
     if (editing) {
-      saveRoutines(routines.map(r => r.id === editing ? { ...r, name: name.trim(), exerciseIds: selectedIds } : r));
+      saveRoutines(routines.map(r => r.id === editing ? { ...r, name: name.trim(), exercises: selectedIds.map(id => ({ exerciseId: id, sets: 3, minReps: 8, maxReps: 12 })) } : r));
     } else {
-      saveRoutines([...routines, { id: uid(), name: name.trim(), exerciseIds: selectedIds }]);
+      saveRoutines([...routines, { id: uid(), name: name.trim(), exercises: selectedIds.map(id => ({ exerciseId: id, sets: 3, minReps: 8, maxReps: 12 })) }]);
     }
     setCreating(false);
   };
@@ -791,7 +880,7 @@ function RoutinesTab({ routines, saveRoutines, exercises }) {
             </div>
           </div>
           <div>
-            {r.exerciseIds.map(id => {
+            {(r.exercises ? r.exercises.map(e => e.exerciseId) : r.exerciseIds).map(id => {
               const ex = exercises.find(e => e.id === id);
               return ex ? <span key={id} className="tag">{ex.name}</span> : null;
             })}
