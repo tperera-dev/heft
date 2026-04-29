@@ -643,13 +643,14 @@ function LogTab({ date, setDate, workouts, saveWorkouts, exercises, routines, we
 // ── WEEK STRIP ───────────────────────────────────────────────
 function WeekStrip({ date, setDate, weekPlan, saveWeekPlan, routines }) {
   const DAY_NAMES = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+  const FULL_DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const todayStr = today();
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(weekPlan);
 
-  // Get the date for each day of the current week (Mon-start feel, anchored to today's week)
   const getWeekDates = () => {
     const dt = new Date(todayStr + "T12:00:00");
-    const dayOfWeek = dt.getDay(); // 0=Sun
-    // Start from Sunday of this week
+    const dayOfWeek = dt.getDay();
     const sunday = new Date(dt);
     sunday.setDate(dt.getDate() - dayOfWeek);
     return Array.from({ length: 7 }, (_, i) => {
@@ -665,36 +666,77 @@ function WeekStrip({ date, setDate, weekPlan, saveWeekPlan, routines }) {
     if (!routineId) return "Rest";
     const r = routines.find(r => r.id === routineId);
     if (!r) return "Rest";
-    // Shorten name: "Push Day" -> "PUSH", "Legs Day" -> "LEGS"
     return r.name.split(" ")[0].toUpperCase();
   };
 
-  return (
-    <div className="week-strip">
-      {weekDates.map((d, i) => {
-        const dayOfWeek = new Date(d + "T12:00:00").getDay();
-        const routineId = weekPlan[dayOfWeek];
-        const isToday   = d === todayStr;
-        const isSelected = d === date;
-        const isFuture  = d > todayStr;
-        const routineName = getRoutineName(routineId);
-        const hasRoutine = !!routineId;
+  const openEdit = () => { setDraft({...weekPlan}); setEditing(true); };
 
-        return (
-          <div
-            key={d}
-            className={`week-day${isToday?" today":""}${isSelected?" selected":""}`}
-            onClick={() => !isFuture && setDate(d)}
-            style={{opacity: isFuture ? 0.35 : 1, cursor: isFuture ? "default" : "pointer"}}
-          >
-            <div className="week-day-name">{DAY_NAMES[dayOfWeek]}</div>
-            <div className={`week-day-label ${hasRoutine?"has-routine":"is-rest"}`}>
-              {routineName}
+  const saveEdit = () => {
+    saveWeekPlan(draft);
+    setEditing(false);
+  };
+
+  return (
+    <>
+      <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8}}>
+        <div style={{fontFamily:"Barlow Condensed,sans-serif", fontWeight:700, fontSize:12, letterSpacing:2, textTransform:"uppercase", color:"#444"}}>This Week</div>
+        <button className="btn btn-ghost btn-sm" style={{fontSize:11,padding:"3px 8px",letterSpacing:1}} onClick={openEdit}>✏ Edit</button>
+      </div>
+      <div className="week-strip">
+        {weekDates.map((d) => {
+          const dayOfWeek = new Date(d + "T12:00:00").getDay();
+          const routineId = weekPlan[dayOfWeek];
+          const isToday    = d === todayStr;
+          const isSelected = d === date;
+          const isFuture   = d > todayStr;
+          const routineName = getRoutineName(routineId);
+          const hasRoutine  = !!routineId;
+          return (
+            <div
+              key={d}
+              className={`week-day${isToday?" today":""}${isSelected?" selected":""}`}
+              onClick={() => !isFuture && setDate(d)}
+              style={{opacity: isFuture ? 0.35 : 1, cursor: isFuture ? "default" : "pointer"}}
+            >
+              <div className="week-day-name">{DAY_NAMES[dayOfWeek]}</div>
+              <div className={`week-day-label ${hasRoutine?"has-routine":"is-rest"}`}>
+                {routineName}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {editing && (
+        <div className="modal-overlay" onClick={() => setEditing(false)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-title">Edit Weekly Schedule</div>
+            {[0,1,2,3,4,5,6].map(dow => (
+              <div key={dow} style={{display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12, gap:12}}>
+                <div style={{fontFamily:"Barlow Condensed,sans-serif", fontWeight:700, fontSize:16, letterSpacing:1, textTransform:"uppercase", color: draft[dow] ? "#e8e8e8" : "#444", width:40, flexShrink:0}}>
+                  {DAY_NAMES[dow]}
+                </div>
+                <select
+                  className="input flex-1"
+                  style={{fontSize:14}}
+                  value={draft[dow] || ""}
+                  onChange={e => setDraft({...draft, [dow]: e.target.value || null})}
+                >
+                  <option value="">— Rest —</option>
+                  {routines.map(r => (
+                    <option key={r.id} value={r.id}>{r.name}</option>
+                  ))}
+                </select>
+              </div>
+            ))}
+            <div className="flex-row" style={{gap:8, marginTop:8}}>
+              <button className="btn btn-ghost flex-1" onClick={() => setEditing(false)}>Cancel</button>
+              <button className="btn btn-primary flex-1" onClick={saveEdit}>Save</button>
             </div>
           </div>
-        );
-      })}
-    </div>
+        </div>
+      )}
+    </>
   );
 }
 
